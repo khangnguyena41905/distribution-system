@@ -1,0 +1,63 @@
+## Build results
+bin/
+obj/
+out/
+[Bb]uild/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+
+## Rider
+.idea/
+*.sln.iml
+
+## Visual Studio
+.vs/
+*.user
+*.suo
+*.userprefs
+
+## Logs
+*.log
+logs/
+*.tlog
+
+## NuGet
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+*.lock.json
+
+## Dotnet artifacts
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+## Other IDE junk
+*.swp
+*.DS_Store
+*.Thumbs.db
+
+## Test
+TestResults/
+*.coverage
+*.coveragexml
+
+## Publish
+wwwroot/
+dist/
+publish/
+
+## Entity Framework / Migrations snapshots (optional)
+Migrations/
+
+## Secrets
+secrets.json
+appsettings.*.local.json
+
+## Ocelot generated file
+ocelot.json
