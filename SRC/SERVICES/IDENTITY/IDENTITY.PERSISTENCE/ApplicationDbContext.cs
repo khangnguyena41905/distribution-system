@@ -1,7 +1,7 @@
 using IDENTITY.DOMAIN.Entities.Identities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Action = System.Action;
+using Action = IDENTITY.DOMAIN.Entities.Identities.Action;
 
 namespace IDENTITY.PERSISTENCE;
 public sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, Guid>

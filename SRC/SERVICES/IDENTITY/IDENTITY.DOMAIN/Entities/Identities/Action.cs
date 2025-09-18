@@ -2,6 +2,7 @@ namespace IDENTITY.DOMAIN.Entities.Identities;
 
 public class Action
 {
+    public Action(){}
     public string Id { get; set; }
     public string Name { get; set; }
     public int? SortOrder { get; set; }
