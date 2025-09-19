@@ -1,9 +1,11 @@
 using IDENTITY.DOMAIN;
 using IDENTITY.DOMAIN.Abstractions.Repositories;
+using IDENTITY.DOMAIN.Abstractions.Repositories.Accounts;
 using IDENTITY.DOMAIN.Abstractions.Repositories.Identities;
 using IDENTITY.DOMAIN.Entities.Identities;
 using IDENTITY.PERSISTENCE.DependencyInjections.Options;
 using IDENTITY.PERSISTENCE.Repositories;
+using IDENTITY.PERSISTENCE.Repositories.Accounts;
 using IDENTITY.PERSISTENCE.Repositories.Identities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -67,7 +69,9 @@ public static class ServiceCollectionExtensions
         .AddTransient<IFunctionRepository, FunctionRepository>()
         .AddTransient<IActionRepository, ActionRepository>()
         .AddTransient<IActionInFunctionRepository, ActionInFunctionRepository>()
-        .AddTransient<IPermissionRepository, PermissionRepository>();
+        .AddTransient<IPermissionRepository, PermissionRepository>()
+        .AddTransient<IAccountRepository, AccountRepository>()
+        .AddTransient<IAppUserRepository, AppUserRepository>();
 
     public static OptionsBuilder<SqlServerRetryOptions> ConfigureSqlServerRetryOptions(this IServiceCollection services, IConfigurationSection section)
         => services

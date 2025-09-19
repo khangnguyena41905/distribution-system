@@ -18,5 +18,6 @@ internal static class TableNames
     internal const string AppUserLogins = nameof(AppUserLogins);     // IdentityUserLogin
     internal const string AppUserTokens = nameof(AppUserTokens);     // IdentityUserToken
 
+    internal const string Accounts = nameof(Accounts);
     // internal const string Product = nameof(Product);
 }
