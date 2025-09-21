@@ -61,4 +61,6 @@ public class AppUserRepository : RepositoryBase<AppUser, Guid>, IAppUserReposito
             .Include(f => f.ActionInFunctions)
             .ToListAsync();
     }
+    
+    
 }

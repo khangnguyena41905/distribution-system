@@ -1,5 +1,6 @@
 using IDENTITY.DOMAIN.Abstractions.Entities;
 using IDENTITY.DOMAIN.Entities.Identities;
+using Microsoft.AspNetCore.Identity;
 
 namespace IDENTITY.DOMAIN.Entities.Accounts;
 
@@ -14,13 +15,16 @@ public class Account : DomainEntity<Guid>
 
     public static Account Create(string userName, string password)
     {
-        return new Account()
+        var hasher = new PasswordHasher<Account>();
+        var account = new Account
         {
             Id = Guid.NewGuid(),
-            UserName = userName,
-            Password = password
+            UserName = userName
         };
+        account.Password = hasher.HashPassword(account, password);
+        return account;
     }
+
 
     public void Update(string password)
     {

@@ -18,6 +18,7 @@
     <ItemGroup>
       <ProjectReference Include="..\IDENTITY.APPLICATION\IDENTITY.APPLICATION.csproj" />
       <ProjectReference Include="..\IDENTITY.CONTRACT\IDENTITY.CONTRACT.csproj" />
+      <ProjectReference Include="..\IDENTITY.INFRASTRUCTURE\IDENTITY.INFRASTRUCTURE.csproj" />
       <ProjectReference Include="..\IDENTITY.PERSISTENCE\IDENTITY.PERSISTENCE.csproj" />
     </ItemGroup>
 

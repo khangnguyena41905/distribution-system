@@ -42,7 +42,8 @@ public static class ServiceCollectionExtensions
 
         services.AddIdentityCore<AppUser>()
             .AddRoles<AppRole>()
-            .AddEntityFrameworkStores<ApplicationDbContext>();
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
 
         services.Configure<IdentityOptions>(options =>
         {

@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.Json.Serialization;
 using IDENTITY.APPLICATION.DependencyInjections.Extensions;
+using IDENTITY.INFRASTRUCTURE.DependencyInjections.Extensions;
 using IDENTITY.PERSISTENCE.DependencyInjections.Extensions;
 using IDENTITY.PERSISTENCE.DependencyInjections.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -42,6 +43,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization();
 
 builder.Services.AddAutoMapperConfig();
+
+builder.Services.AddInfrastructure();
+builder.Services.AddRedisService(builder.Configuration);
 
 var app = builder.Build();
 
