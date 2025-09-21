@@ -54,4 +54,11 @@ public class AppUserRepository : RepositoryBase<AppUser, Guid>, IAppUserReposito
         return (user, roles);
     }
 
+    public async Task<List<Function>> GetFunctionsWithActionsAsync(List<string> functionIds)
+    {
+        return await _context.Functions
+            .Where(f => functionIds.Contains(f.Id))
+            .Include(f => f.ActionInFunctions)
+            .ToListAsync();
+    }
 }

@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using IDENTITY.APPLICATION.DependencyInjections.Extensions;
 using IDENTITY.PERSISTENCE.DependencyInjections.Extensions;
 using IDENTITY.PERSISTENCE.DependencyInjections.Options;
@@ -7,7 +8,12 @@ using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(opt =>
+{
+    opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    opt.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -34,6 +40,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddAuthorization();
+
+builder.Services.AddAutoMapperConfig();
 
 var app = builder.Build();
 

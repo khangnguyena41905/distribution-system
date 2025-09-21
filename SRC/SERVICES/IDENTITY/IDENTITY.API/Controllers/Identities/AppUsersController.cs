@@ -1,4 +1,5 @@
 using IDENTITY.API.Abstractions;
+using IDENTITY.APPLICATION.Dtos.PermissionDtos;
 using IDENTITY.APPLICATION.Features.Identities.AppUsers;
 using IDENTITY.APPLICATION.Features.Identities.Permissions;
 using Microsoft.AspNetCore.Mvc;
@@ -150,10 +151,14 @@ public class AppUsersController : ApiBaseController
 
         return BadRequest(new { errors = result.Error });
     }
-
-    public class PermissionDto
+    [HttpGet("{userId}/permissions")]
+    public async Task<IActionResult> GetUserPermissions(Guid userId)
     {
-        public string FunctionId { get; set; }
-        public string ActionId { get; set; }
+        var result = await _sender.Send(new GetUserPermissionFunctionsQuery(userId));
+
+        if (result.IsFailure)
+            return NotFound(result.Error);
+
+        return Ok(result.Value);
     }
 }
