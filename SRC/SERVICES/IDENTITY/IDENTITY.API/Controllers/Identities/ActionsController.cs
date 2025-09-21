@@ -50,6 +50,7 @@ public class ActionsController : ApiBaseController
     public async Task<IActionResult> Create([FromBody] CreateOrUpdateActionRequest request, CancellationToken cancellationToken)
     {
         var command = new CreateActionCommand(
+            request.Id,
             request.Name,
             request.SortOrder,
             request.IsActive

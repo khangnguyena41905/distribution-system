@@ -22,5 +22,14 @@ public class PermissionConfiguration: IEntityTypeConfiguration<Permission>
         builder.Property(x => x.ActionId)
             .IsRequired()
             .HasMaxLength(50);
+        
+        builder.HasOne(p => p.ActionInFunction)
+            .WithMany(aif => aif.Permissions)
+            .HasForeignKey(p => new { p.ActionId, p.FunctionId })
+            .HasPrincipalKey(aif => new { aif.ActionId, aif.FunctionId });
+
+        builder.HasOne(p => p.Role)
+            .WithMany(r => r.Permissions)
+            .HasForeignKey(p => p.RoleId);
     }
 }

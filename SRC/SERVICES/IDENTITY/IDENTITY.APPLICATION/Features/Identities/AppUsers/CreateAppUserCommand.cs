@@ -1,6 +1,7 @@
 using FluentValidation;
 using IDENTITY.CONTRACT.Abstractions.Message;
 using IDENTITY.CONTRACT.Abstractions.Shared;
+using IDENTITY.DOMAIN;
 using IDENTITY.DOMAIN.Abstractions.Repositories.Identities;
 using IDENTITY.DOMAIN.Entities.Identities;
 
@@ -36,9 +37,10 @@ internal class CreateAppUserCommandValidator : AbstractValidator<CreateAppUserCo
 internal class CreateAppUserCommandHandler : ICommandHandler<CreateAppUserCommand, AppUser>
 {
     private readonly IAppUserRepository _repository;
-
-    public CreateAppUserCommandHandler(IAppUserRepository repository)
+    private readonly IUnitOfWork _uow;
+    public CreateAppUserCommandHandler(IUnitOfWork uow, IAppUserRepository repository)
     {
+        _uow = uow; 
         _repository = repository;
     }
 
@@ -59,7 +61,7 @@ internal class CreateAppUserCommandHandler : ICommandHandler<CreateAppUserComman
         );
 
         await _repository.AddAsync(user);
-
+        await _uow.CommitAsync();
         return Result<AppUser>.Success(user);
     }
 }

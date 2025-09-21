@@ -1,5 +1,6 @@
 using IDENTITY.CONTRACT.Abstractions.Message;
 using IDENTITY.CONTRACT.Abstractions.Shared;
+using IDENTITY.DOMAIN;
 using IDENTITY.DOMAIN.Abstractions.Repositories.Identities;
 
 namespace IDENTITY.APPLICATION.Features.Identities.AppUsers;
@@ -9,9 +10,10 @@ public record DeleteAppUserCommand(Guid Id) : ICommand<bool>;
 internal class DeleteAppUserCommandHandler : ICommandHandler<DeleteAppUserCommand, bool>
 {
     private readonly IAppUserRepository _repository;
-
-    public DeleteAppUserCommandHandler(IAppUserRepository repository)
+    private readonly IUnitOfWork _uow;
+    public DeleteAppUserCommandHandler(IUnitOfWork uow, IAppUserRepository repository)
     {
+        _uow = uow; 
         _repository = repository;
     }
 
@@ -23,7 +25,7 @@ internal class DeleteAppUserCommandHandler : ICommandHandler<DeleteAppUserComman
             return Result.Failure<bool>(Error.None);
 
         await _repository.RemoveAsync(user);
-
+        await _uow.CommitAsync();
         return Result.Success(true);
     }
 }

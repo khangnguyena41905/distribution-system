@@ -53,7 +53,7 @@ internal sealed class AppUserConfiguration : IEntityTypeConfiguration<AppUser>
             .IsRequired();
         
         builder.HasOne(u => u.Account)
-            .WithOne(a => a.AppUser)
+            .WithOne()
             .HasForeignKey<AppUser>(u => u.AccountId)
             .OnDelete(DeleteBehavior.Cascade); 
     }

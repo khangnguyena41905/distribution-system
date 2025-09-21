@@ -13,7 +13,8 @@ public record CreateFunctionCommand(
     string? ParrentId,
     int? SortOrder,
     string? CssClass,
-    bool? IsActive
+    bool? IsActive,
+    List<string>? ActionInFunctions
 ) : ICommand<Function>;
 
 internal class CreateFunctionCommandValidator : AbstractValidator<CreateFunctionCommand>
@@ -36,11 +37,17 @@ internal class CreateFunctionCommandValidator : AbstractValidator<CreateFunction
 internal class CreateFunctionCommandHandler : ICommandHandler<CreateFunctionCommand, Function>
 {
     private readonly IFunctionRepository _functionRepository;
+    private readonly IActionInFunctionRepository _actionInFunctionRepository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public CreateFunctionCommandHandler(IFunctionRepository functionRepository, IUnitOfWork unitOfWork)
+    public CreateFunctionCommandHandler(
+        IFunctionRepository functionRepository,
+        IActionInFunctionRepository actionInFunctionRepository, 
+        IUnitOfWork unitOfWork
+        )
     {
         _functionRepository = functionRepository;
+        _actionInFunctionRepository = actionInFunctionRepository;
         _unitOfWork = unitOfWork;
     }
 
@@ -63,6 +70,23 @@ internal class CreateFunctionCommandHandler : ICommandHandler<CreateFunctionComm
         };
 
         var result = await _functionRepository.AddAsync(func);
+        
+        if (request !=null && request.ActionInFunctions?.Any() == true)
+        {
+            List<ActionInFunction> actionInFunctions = new List<ActionInFunction>();
+            foreach (var aif in request.ActionInFunctions)
+            {
+                var actionInFunction = new ActionInFunction()
+                {
+                    ActionId = aif,
+                    FunctionId = result.Id
+                };
+                actionInFunctions.Add(actionInFunction);
+            }
+
+            await _actionInFunctionRepository.AddRangeAsync(actionInFunctions);
+        }
+        
         await _unitOfWork.CommitAsync();
         return Result.Success(result);
     }

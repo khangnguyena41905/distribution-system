@@ -8,9 +8,9 @@ public class Account : DomainEntity<Guid>
     public string UserName { get; private set; }
     public string Password { get; private set; }
     
-    public virtual AppUser AppUser { get; set; }
+    // public virtual AppUser AppUser { get; set; }
     
-    private Account(){}
+    public Account(){}
 
     public static Account Create(string userName, string password)
     {

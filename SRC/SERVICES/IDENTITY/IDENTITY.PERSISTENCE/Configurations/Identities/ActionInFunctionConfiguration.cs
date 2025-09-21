@@ -11,7 +11,6 @@ internal sealed class ActionInFunctionConfiguration : IEntityTypeConfiguration<A
     {
         builder.ToTable(TableNames.ActionInFunctions);
 
-        // Thiết lập khóa chính là composite key gồm ActionId và FunctionId
         builder.HasKey(x => new { x.ActionId, x.FunctionId });
     }
 }

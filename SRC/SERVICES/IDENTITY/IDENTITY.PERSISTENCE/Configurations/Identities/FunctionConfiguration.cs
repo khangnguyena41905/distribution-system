@@ -36,12 +36,12 @@ public class FunctionConfiguration: IEntityTypeConfiguration<Function>
         builder.Property(x => x.SortOrder)
             .HasDefaultValue(null);
 
-        // Mỗi Function có nhiều Permission
-        builder.HasMany(x => x.Permissions)
-            .WithOne()
-            .HasForeignKey(p => p.FunctionId)
-            .IsRequired()
-            .OnDelete(DeleteBehavior.Cascade);
+        // // Mỗi Function có nhiều Permission
+        // builder.HasMany(x => x.Permissions)
+        //     .WithOne()
+        //     .HasForeignKey(p => p.FunctionId)
+        //     .IsRequired()
+        //     .OnDelete(DeleteBehavior.Cascade);
 
         // Mỗi Function có nhiều ActionInFunction
         builder.HasMany(x => x.ActionInFunctions)

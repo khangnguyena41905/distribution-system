@@ -14,4 +14,6 @@ public interface IRepositoryBase<TEntity, in TKey> where TEntity : class
     Task<TEntity> UpdateAsync(TEntity entity);
     Task RemoveAsync(TEntity entity);
     Task RemoveMultipleAsync(List<TEntity> entities);
+    Task VirtualRemoveAsync(TEntity entity);
+    Task VirtualRemoveMultipleAsync(List<TEntity> entities);
 }

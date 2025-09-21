@@ -8,6 +8,7 @@ using Action = IDENTITY.DOMAIN.Entities.Identities.Action;
 namespace IDENTITY.APPLICATION.Features.Identities.Actions;
 
 public record CreateActionCommand(
+    string Id,
     string Name,
     int? SortOrder,
     bool? IsActive
@@ -50,7 +51,7 @@ internal class CreateActionCommandHandler : ICommandHandler<CreateActionCommand,
 
         var action = new Action
         {
-            Id = Guid.NewGuid().ToString(),
+            Id = request.Id,
             Name = request.Name,
             SortOrder = request.SortOrder,
             IsActive = request.IsActive ?? true

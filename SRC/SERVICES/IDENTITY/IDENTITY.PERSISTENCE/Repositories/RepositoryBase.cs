@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using IDENTITY.CONTRACT.Abstractions.Shared;
+using IDENTITY.DOMAIN.Abstractions.Entities;
 using Microsoft.EntityFrameworkCore;
 using IDENTITY.DOMAIN.Abstractions.Repositories;
 
@@ -8,7 +9,7 @@ namespace IDENTITY.PERSISTENCE.Repositories;
 public class RepositoryBase<TEntity, TKey> : IRepositoryBase<TEntity, TKey>, IDisposable
     where TEntity : class
 {
-    private readonly ApplicationDbContext _context;
+    protected readonly ApplicationDbContext _context;
 
     public RepositoryBase(ApplicationDbContext context)
         => _context = context;
@@ -81,6 +82,42 @@ public class RepositoryBase<TEntity, TKey> : IRepositoryBase<TEntity, TKey>, IDi
         _context.Set<TEntity>().RemoveRange(entities);
         return Task.CompletedTask;
     }
+
+    public Task VirtualRemoveAsync(TEntity entity)
+    {
+        if (entity is AuditEntity<TKey> domainEntity)
+        {
+            domainEntity.IsDeleted = true;
+            _context.Set<TEntity>().Update(entity);
+            return Task.CompletedTask;
+        }
+
+        throw new ArgumentNullException(nameof(entity), $"{nameof(entity)} is not a domain entity");
+    }
+    
+    public Task VirtualRemoveMultipleAsync(List<TEntity> entities)
+    {
+        if (entities == null || !entities.Any())
+        {
+            throw new ArgumentNullException(nameof(entities), "Entity list is null or empty");
+        }
+
+        foreach (var entity in entities)
+        {
+            if (entity is AuditEntity<TKey> domainEntity)
+            {
+                domainEntity.IsDeleted = true;
+                _context.Set<TEntity>().Update(entity);
+            }
+            else
+            {
+                throw new ArgumentException("One or more entities are not of type AuditEntity", nameof(entities));
+            }
+        }
+
+        return Task.CompletedTask;
+    }
+
 
     private IQueryable<TEntity> ApplyIncludes(IQueryable<TEntity> query, params Expression<Func<TEntity, object>>[] includeProperties)
     {

@@ -10,5 +10,5 @@ public class CreateOrUpdateFunctionRequest
     public int? SortOrder { get; set; }
     public string? CssClass { get; set; }
     public bool? IsActive { get; set; }
-    public ICollection<ActionInFunction>? ActionInFunctions { get; set; }
+    public List<string>? ActionInFunctions { get; set; }
 }

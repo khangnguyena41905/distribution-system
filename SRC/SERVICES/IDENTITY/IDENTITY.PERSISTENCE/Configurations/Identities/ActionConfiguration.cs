@@ -26,11 +26,11 @@ public class ActionConfiguration : IEntityTypeConfiguration<Action>
         builder.Property(x => x.SortOrder)
             .HasDefaultValue(null);
 
-        // Each Action can have many Permissions
-        builder.HasMany(e => e.Permissions)
-            .WithOne()
-            .HasForeignKey(p => p.ActionId)
-            .IsRequired();
+        // // Each Action can have many Permissions
+        // builder.HasMany(e => e.Permissions)
+        //     .WithOne()
+        //     .HasForeignKey(p => p.ActionId)
+        //     .IsRequired();
 
         // Each Action can have many ActionInFunctions
         builder.HasMany(e => e.ActionInFunctions)

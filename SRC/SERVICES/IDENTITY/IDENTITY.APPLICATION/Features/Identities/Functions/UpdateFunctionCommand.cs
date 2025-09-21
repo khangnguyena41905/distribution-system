@@ -15,7 +15,7 @@ public record UpdateFunctionCommand(
     int? SortOrder,
     string? CssClass,
     bool? IsActive,
-    ICollection<ActionInFunction>? ActionInFunctions
+    List<string>? ActionInFunctions
 ) : ICommand<Function>;
 
 public class UpdateFunctionCommandValidator : AbstractValidator<UpdateFunctionCommand>
@@ -71,12 +71,18 @@ internal class UpdateFunctionCommandHandler : ICommandHandler<UpdateFunctionComm
         // 4. Thêm ActionInFunctions mới (nếu có)
         if (request.ActionInFunctions?.Any() == true)
         {
+            List<ActionInFunction> actionInFunctions = new List<ActionInFunction>();
             foreach (var aif in request.ActionInFunctions)
             {
-                aif.FunctionId = function.Id; // gán FK nếu cần
+                var actionInFunction = new ActionInFunction()
+                {
+                    ActionId = aif,
+                    FunctionId = function.Id
+                };
+                actionInFunctions.Add(actionInFunction);
             }
 
-            await _actionInFunctionRepository.AddRangeAsync(request.ActionInFunctions.ToList());
+            await _actionInFunctionRepository.AddRangeAsync(actionInFunctions);
         }
 
         // 5. Cập nhật Function

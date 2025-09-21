@@ -1,5 +1,6 @@
 using IDENTITY.API.Abstractions;
 using IDENTITY.APPLICATION.Features.Identities.AppUsers;
+using IDENTITY.APPLICATION.Features.Identities.Permissions;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 
@@ -24,7 +25,7 @@ public class AppUsersController : ApiBaseController
         [FromQuery] string? search = null,
         CancellationToken cancellationToken = default)
     {
-        var result = await _sender.Send(new GetPagedAppUserQuery(pageIndex - 1, pageSize, search), cancellationToken);
+        var result = await _sender.Send(new GetPagedAppUserQuery(pageIndex, pageSize, search), cancellationToken);
 
         if (result.IsSuccess)
             return Ok(result.Value);
@@ -93,4 +94,66 @@ public class AppUsersController : ApiBaseController
         return NotFound(new { errors = result.Error });
     }
 
+    // // GET api/appusers/{userId}/roles
+    // [HttpGet("{userId:guid}/roles")]
+    // public async Task<IActionResult> GetUserWithRoles(Guid userId, CancellationToken cancellationToken)
+    // {
+    //     var result = await _sender.Send(new GetUserWithRolesQuery(userId), cancellationToken);
+    //     if (result.IsSuccess)
+    //         return Ok(new 
+    //         {
+    //             User = result.Value.User,
+    //             Roles = result.Value.Roles
+    //         });
+    //
+    //     return NotFound(new { errors = result.Error });
+    // }
+
+    // POST api/appusers/{userId}/roles
+    [HttpPost("{userId:guid}/roles")]
+    public async Task<IActionResult> AssignRole(Guid userId, List<Guid> roleId, CancellationToken cancellationToken)
+    {
+        var command = new AssignRolesToUserCommand(userId, roleId);
+        var result = await _sender.Send(command, cancellationToken);
+
+        if (result.IsSuccess)
+            return Ok();
+
+        return BadRequest(new { errors = result.Error });
+    }
+
+    // GET api/appusers/{userId}/permissions/check?functionId=xxx&actionId=yyy
+    [HttpGet("{userId:guid}/permissions/check")]
+    public async Task<IActionResult> CheckPermission(Guid userId, [FromQuery] string functionId, [FromQuery] string actionId, CancellationToken cancellationToken)
+    {
+        var query = new CheckUserPermissionQuery(userId, functionId, actionId);
+        var result = await _sender.Send(query, cancellationToken);
+
+        if (result.IsSuccess)
+            return Ok(result.Value);
+
+        return BadRequest(new { errors = result.Error });
+    }
+    // POST api/roles/{roleId}/permissions
+    [HttpPost("{roleId:guid}/permissions")]
+    public async Task<IActionResult> AssignPermissionsToRole(Guid roleId, [FromBody] List<PermissionDto> permissions, CancellationToken cancellationToken)
+    {
+        var command = new AssignPermissionsToRoleCommand(
+            roleId,
+            permissions.Select(p => (p.FunctionId, p.ActionId)).ToList()
+        );
+
+        var result = await _sender.Send(command, cancellationToken);
+
+        if (result.IsSuccess)
+            return Ok();
+
+        return BadRequest(new { errors = result.Error });
+    }
+
+    public class PermissionDto
+    {
+        public string FunctionId { get; set; }
+        public string ActionId { get; set; }
+    }
 }
