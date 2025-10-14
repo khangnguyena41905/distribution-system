@@ -1,15 +1,37 @@
+using System.Text.Json.Serialization;
+using INVENTORY.APPLICATION.DependencyInjections.Extensions;
+using INVENTORY.PERSISTENCE.DependencyInjections.Extensions;
+using INVENTORY.PERSISTENCE.DependencyInjections.Options;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.AddControllers().AddJsonOptions(opt =>
+{
+    opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    opt.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+});
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Add configuration
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddConffigMediatR();
+builder.Services.AddApplicationServices();
+builder.Services.ConfigureSqlServerRetryOptions(builder.Configuration.GetSection(nameof(SqlServerRetryOptions)));
+builder.Services.AddSqlConfiguration();
+
+builder.Services.AddRepositoryBaseConfiguration();
+
+builder.Services.AddAuthorization();
+
+builder.Services.AddAutoMapperConfig();
+
+// builder.Services.AddInfrastructure();
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

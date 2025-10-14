@@ -7,8 +7,6 @@ using MediatR;
 
 namespace IDENTITY.API.Controllers.Identities;
 
-[Route("api/[controller]")]
-[ApiController]
 public class AppUsersController : ApiBaseController
 {
     public AppUsersController(ISender sender) : base(sender)

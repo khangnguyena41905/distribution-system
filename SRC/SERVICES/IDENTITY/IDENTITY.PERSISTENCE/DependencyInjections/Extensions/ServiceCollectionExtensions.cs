@@ -7,6 +7,7 @@ using IDENTITY.PERSISTENCE.DependencyInjections.Options;
 using IDENTITY.PERSISTENCE.Repositories;
 using IDENTITY.PERSISTENCE.Repositories.Accounts;
 using IDENTITY.PERSISTENCE.Repositories.Identities;
+using INVENTORY.DOMAIN.Abstractions.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

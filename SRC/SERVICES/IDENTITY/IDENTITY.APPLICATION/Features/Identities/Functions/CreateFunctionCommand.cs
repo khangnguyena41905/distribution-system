@@ -1,7 +1,7 @@
-using IDENTITY.CONTRACT.Abstractions.Message;
+using COMMON.CONTRACT.Abstractions.Message;
 using IDENTITY.DOMAIN.Entities.Identities;
 using FluentValidation;
-using IDENTITY.CONTRACT.Abstractions.Shared;
+using COMMON.CONTRACT.Abstractions.Shared;
 using IDENTITY.DOMAIN;
 using IDENTITY.DOMAIN.Abstractions.Repositories.Identities;
 

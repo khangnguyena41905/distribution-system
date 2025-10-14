@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace IDENTITY.API.Abstractions;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/identity/[controller]")]
 public abstract class ApiBaseController : ControllerBase
 {
     protected readonly ISender _sender;

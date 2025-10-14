@@ -1,8 +1,8 @@
 using FluentValidation;
 using IDENTITY.APPLICATION.Abstractions;
 using IDENTITY.APPLICATION.Dtos.PermissionDtos;
-using IDENTITY.CONTRACT.Abstractions.Message;
-using IDENTITY.CONTRACT.Abstractions.Shared;
+using COMMON.CONTRACT.Abstractions.Message;
+using COMMON.CONTRACT.Abstractions.Shared;
 
 namespace IDENTITY.APPLICATION.Features.Caching;
 

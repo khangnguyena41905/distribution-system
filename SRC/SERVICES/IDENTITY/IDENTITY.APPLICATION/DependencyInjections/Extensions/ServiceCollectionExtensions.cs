@@ -1,5 +1,5 @@
+using COMMON.CONTRACT.Abstractions.Behaviors;
 using FluentValidation;
-using IDENTITY.APPLICATION.Behaviors;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 

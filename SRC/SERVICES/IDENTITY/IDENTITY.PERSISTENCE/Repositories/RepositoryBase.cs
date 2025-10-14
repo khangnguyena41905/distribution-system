@@ -1,7 +1,9 @@
 using System.Linq.Expressions;
-using IDENTITY.CONTRACT.Abstractions.Shared;
+using COMMON.CONTRACT.Abstractions.Shared;
 using IDENTITY.DOMAIN.Abstractions.Entities;
 using Microsoft.EntityFrameworkCore;
+using INVENTORY.DOMAIN.Abstractions.Repositories;
+
 using IDENTITY.DOMAIN.Abstractions.Repositories;
 
 namespace IDENTITY.PERSISTENCE.Repositories;
