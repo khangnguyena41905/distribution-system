@@ -7,7 +7,6 @@ using IDENTITY.APPLICATION.Features.Identities.Permissions;
 using COMMON.CONTRACT.Abstractions.Message;
 using COMMON.CONTRACT.Abstractions.Shared;
 using IDENTITY.DOMAIN.Abstractions.Repositories.Identities;
-using IDENTITY.DOMAIN.Entities.Accounts;
 using IDENTITY.DOMAIN.Entities.Identities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -35,17 +34,13 @@ internal class LoginCommandHandler : ICommandHandler<LoginCommand, LoginResultDt
     public async Task<Result<LoginResultDto>> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
         
-        var account = await _userRepository.FindSingleAsync(x=> x.Account.UserName == request.UserName);
+        var account = await _userRepository.FindSingleAsync(x=> x.UserName == request.UserName);
         var (user, roles) = await _userRepository.GetUserWithRolesAsync(account.Id);
 
         if (user == null)
             return Result.Failure<LoginResultDto>(new Error("401", "Invalid username or password"));
-
-        // Kiểm tra mật khẩu
-        var hasher = new PasswordHasher<Account>();
-        var verifyResult = hasher.VerifyHashedPassword(user.Account, user.Account.Password, request.Password);
-
-        if (verifyResult == PasswordVerificationResult.Failed)
+        
+        if (!account.IsValid(request.Password))
         {
             return Result.Failure<LoginResultDto>(new Error("401", "Invalid username or password"));
         }

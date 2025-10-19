@@ -2,7 +2,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using IDENTITY.API.Abstractions;
-using IDENTITY.APPLICATION.Features.Accounts;
 using IDENTITY.APPLICATION.Features.Identities.AppUsers;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -25,12 +24,12 @@ public class AuthController : ApiBaseController
         return Ok(result.Value);
     }
     [HttpPost("register")]
-    public async Task<IActionResult> Login([FromBody] CreateAccountCommand command)
+    public async Task<IActionResult> Login([FromBody] RegisterAppUserCommand command)
     {
         var result = await _sender.Send(command);
         if (result.IsFailure)
             return Unauthorized(result.Error.Message);
-
+    
         return Ok(result.Value);
     }
 }

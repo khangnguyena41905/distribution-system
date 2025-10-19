@@ -1,6 +1,19 @@
-using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
-using IDENTITY.APPLICATION.Abstractions;
+using Microsoft.Extensions.Caching.Distributed;
+
+namespace GATEWAY.API.Services;
+public interface ICacheService
+{
+    Task<T?> GetAsync<T>(string key, CancellationToken cancellationToken = default)
+        where T : class;
+
+    Task SetAsync<T>(string key, T value, TimeSpan fromHours, CancellationToken cancellationToken = default)
+        where T : class;
+
+    Task RemoveAsync(string key, CancellationToken cancellationToken = default);
+
+    Task RemoveByPrefixAsync(string prefixKey, CancellationToken cancellationToken = default);
+}
 
 public class CacheService : ICacheService
 {

@@ -25,9 +25,6 @@ internal sealed class AppUserConfiguration : IEntityTypeConfiguration<AppUser>
         builder.Property(x => x.IsReceipient)
             .HasDefaultValue(-1);
 
-        builder.Property(x => x.AccountId)
-            .IsRequired();
-
         // Each User can have many UserClaims
         builder.HasMany(e => e.Claims)
             .WithOne()
@@ -51,10 +48,6 @@ internal sealed class AppUserConfiguration : IEntityTypeConfiguration<AppUser>
             .WithOne()
             .HasForeignKey(ur => ur.UserId)
             .IsRequired();
-        
-        builder.HasOne(u => u.Account)
-            .WithOne()
-            .HasForeignKey<AppUser>(u => u.AccountId)
-            .OnDelete(DeleteBehavior.Cascade); 
+      
     }
 }

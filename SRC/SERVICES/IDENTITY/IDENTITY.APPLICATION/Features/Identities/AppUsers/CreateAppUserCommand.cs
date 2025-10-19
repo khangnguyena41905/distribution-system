@@ -16,7 +16,6 @@ public record CreateAppUserCommand(
     Guid? ManagerId,
     Guid PositionId,
     int IsReceipient,
-    Guid AccountId,
     string UserName,
     string Email
 ) : ICommand<AppUser>;
@@ -28,7 +27,6 @@ internal class CreateAppUserCommandValidator : AbstractValidator<CreateAppUserCo
         RuleFor(x => x.FirstName).NotEmpty();
         RuleFor(x => x.LastName).NotEmpty();
         RuleFor(x => x.PositionId).NotEmpty();
-        RuleFor(x => x.AccountId).NotEmpty();
         RuleFor(x => x.UserName).NotEmpty();
         RuleFor(x => x.Email).EmailAddress().NotEmpty();
     }
@@ -55,7 +53,6 @@ internal class CreateAppUserCommandHandler : ICommandHandler<CreateAppUserComman
             request.ManagerId,
             request.PositionId,
             request.IsReceipient,
-            request.AccountId,
             request.UserName,
             request.Email
         );

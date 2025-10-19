@@ -41,7 +41,6 @@ internal class GetPagedAppUserQueryHandler : IQueryHandler<GetPagedAppUserQuery,
             request.PageIndex,
             request.PageSize,
             predicate,
-            x => x.Account, // include Account if needed
             x => x.UserRoles // include roles if needed
         );
 

@@ -1,4 +1,3 @@
-using IDENTITY.DOMAIN.Entities.Accounts;
 using Microsoft.AspNetCore.Identity;
 
 namespace IDENTITY.DOMAIN.Entities.Identities;
@@ -15,8 +14,6 @@ public class AppUser : IdentityUser<Guid>
     public Guid? ManagerId { get; set; }
     public Guid PositionId { get; set; }
     public int IsReceipient {  get; set; }
-    public Guid AccountId { get; set; }  
-    public virtual Account Account { get; set; }  
     public virtual ICollection<IdentityUserClaim<Guid>> Claims { get; set; }
     public virtual ICollection<IdentityUserLogin<Guid>> Logins { get; set; }
     public virtual ICollection<IdentityUserToken<Guid>> Tokens { get; set; }
@@ -31,7 +28,6 @@ public class AppUser : IdentityUser<Guid>
         Guid? managerId,
         Guid positionId,
         int isReceipient,
-        Guid accountId,
         string userName,
         string email)
     {
@@ -47,7 +43,6 @@ public class AppUser : IdentityUser<Guid>
             ManagerId = managerId,
             PositionId = positionId,
             IsReceipient = isReceipient,
-            AccountId = accountId,
             UserName = userName,
             NormalizedUserName = userName?.ToUpper(),
             Email = email,
@@ -98,5 +93,16 @@ public class AppUser : IdentityUser<Guid>
 
         ConcurrencyStamp = Guid.NewGuid().ToString(); // optional
     }
+    public bool IsValid(string password)
+    {
+        var hasher = new PasswordHasher<AppUser>();
+        var result = hasher.VerifyHashedPassword(this, this.PasswordHash, password);
+        return result == PasswordVerificationResult.Success;
+    }
 
+    public void RegisterAccount(string password)
+    {
+        var hasher = new PasswordHasher<AppUser>();
+        PasswordHash = hasher.HashPassword(this, password);
+    }
 }
