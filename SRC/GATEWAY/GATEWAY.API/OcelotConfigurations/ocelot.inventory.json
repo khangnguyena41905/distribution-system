@@ -8,12 +8,7 @@
         { "Host": "localhost", "Port": 8002 }
       ],
       "UpstreamPathTemplate": "/api/inventory/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": []
-      },
-      "DelegatingHandlers": [ "ProductDelegationHandler" ]
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
     }
   ]
 }

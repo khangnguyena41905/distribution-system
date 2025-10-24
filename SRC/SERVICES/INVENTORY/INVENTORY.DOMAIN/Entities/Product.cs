@@ -22,7 +22,9 @@ public class Product : AuditEntity<Guid>
             Id = Guid.NewGuid(),
             Name = name,
             Description = description,
-            Price = price
+            Price = price,
+            CreatedDate = DateTime.Now,
+            CreatedBy = "System",
         };
 
         newEntity.RaiseDomainEvent(new ProductCreatedDomainEvent(newEntity.Id, name, price));

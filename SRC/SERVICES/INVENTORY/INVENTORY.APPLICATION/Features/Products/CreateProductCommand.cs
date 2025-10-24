@@ -3,7 +3,9 @@ using COMMON.CONTRACT.Abstractions.Shared;
 using FluentValidation;
 using INVENTORY.DOMAIN.Abstractions;
 using INVENTORY.DOMAIN.Entities;
+using INVENTORY.DOMAIN.OutboxEvents.Products;
 using INVENTORY.DOMAIN.Repositories;
+using MassTransit;
 
 namespace INVENTORY.APPLICATION.Features.Products;
 
@@ -33,11 +35,12 @@ internal class CreateProductCommandHandler : ICommandHandler<CreateProductComman
 {
     private readonly IProductRepository _productRepository;
     private readonly IUnitOfWork _unitOfWork;
-
-    public CreateProductCommandHandler(IUnitOfWork unitOfWork, IProductRepository productRepository)
+    private readonly IPublishEndpoint _eventPublisher;
+    public CreateProductCommandHandler(IUnitOfWork unitOfWork, IProductRepository productRepository, IPublishEndpoint eventPublisher)
     {
         _unitOfWork = unitOfWork;
         _productRepository = productRepository;
+        _eventPublisher = eventPublisher;
     }
 
     public async Task<Result<Product>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
@@ -55,6 +58,8 @@ internal class CreateProductCommandHandler : ICommandHandler<CreateProductComman
         var result = await _productRepository.AddAsync(product);
         await _unitOfWork.CommitAsync(cancellationToken);
 
+        await _eventPublisher.Publish(new ProductCreatedOutboxEvent { Id = product.Id, CreatedDate = DateTime.Now });
+        
         return Result.Success(result);
     }
 }

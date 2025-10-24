@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using INVENTORY.APPLICATION.DependencyInjections.Extensions;
+using INVENTORY.INFRASTRUCTURE.DependencyInjections.Extensions;
 using INVENTORY.PERSISTENCE.DependencyInjections.Extensions;
 using INVENTORY.PERSISTENCE.DependencyInjections.Options;
 using Microsoft.OpenApi.Models;
@@ -54,7 +55,7 @@ builder.Services.AddConffigMediatR();
 builder.Services.AddApplicationServices();
 builder.Services.ConfigureSqlServerRetryOptions(builder.Configuration.GetSection(nameof(SqlServerRetryOptions)));
 builder.Services.AddSqlConfiguration();
-
+builder.Services.AddOutboxEventHandlers(builder.Configuration);
 builder.Services.AddRepositoryBaseConfiguration();
 
 builder.Services.AddAuthorization();
