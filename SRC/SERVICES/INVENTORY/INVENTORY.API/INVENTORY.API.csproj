@@ -4,6 +4,7 @@
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
@@ -18,6 +19,12 @@
       <ProjectReference Include="..\INVENTORY.APPLICATION\INVENTORY.APPLICATION.csproj" />
       <ProjectReference Include="..\INVENTORY.INFRASTRUCTURE\INVENTORY.INFRASTRUCTURE.csproj" />
       <ProjectReference Include="..\INVENTORY.PERSISTENCE\INVENTORY.PERSISTENCE.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\..\..\..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
     </ItemGroup>
 
 </Project>

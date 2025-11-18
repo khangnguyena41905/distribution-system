@@ -1,0 +1,64 @@
+﻿services:
+  gateway:
+    image: gateway
+    container_name: gateway.api
+    ports:
+      - "9500:8080"
+    build:
+      context: .
+      dockerfile: SRC/GATEWAY/GATEWAY.API/Dockerfile
+    depends_on:
+      - identity
+      - inventory
+      - redis
+    environment:
+      Redis__Configuration: "redis:6379"
+      Redis__InstanceName: "IdentityServer:"
+        
+  identity:
+    image: identity
+    container_name: identity
+    ports:
+      - "8001:8080"
+    build:
+      context: .
+      dockerfile: SRC/SERVICES/IDENTITY/IDENTITY.API/Dockerfile
+    depends_on:
+      - redis
+    environment:
+      Redis__Configuration: "redis:6379"
+      Redis__InstanceName: "IdentityServer:"
+        
+  inventory:
+    image: inventory
+    container_name: inventory
+    ports:
+      - "8002:8080"
+    build:
+      context: .
+      dockerfile: SRC/SERVICES/INVENTORY/INVENTORY.API/Dockerfile
+    depends_on:
+      - rabbitmq
+    environment:
+      RabbitMQ__Host: "rabbitmq"
+      RabbitMQ__Username: "admin"
+      RabbitMQ__Password: "admin"
+      RabbitMQ__VirtualHost: "/"
+      RabbitMQ__Port: 5672
+      
+  redis:
+    image: redis:8.2
+    container_name: redis
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+
+  rabbitmq:
+    image: rabbitmq:4.2.1-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"      
+      - "15672:15672" 
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
