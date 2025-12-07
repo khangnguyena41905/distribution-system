@@ -6,7 +6,7 @@
         {
           "Name": "Identity Service",
           "Version": "v1",
-          "Url": "http://localhost:8001/swagger/v1/swagger.json"
+          "Url": "http://identity:8080/swagger/v1/swagger.json"
         }
       ]
     },
@@ -16,7 +16,7 @@
         {
           "Name": "Inventory Service",
           "Version": "v1",
-          "Url": "http://localhost:8002/swagger/v1/swagger.json"
+          "Url": "http://inventory:8080/swagger/v1/swagger.json"
         }
       ]
     }

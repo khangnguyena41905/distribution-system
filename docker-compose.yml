@@ -2,21 +2,27 @@
   gateway:
     image: gateway
     container_name: gateway.api
+    hostname: gateway
     ports:
       - "9500:8080"
     build:
       context: .
       dockerfile: SRC/GATEWAY/GATEWAY.API/Dockerfile
     depends_on:
-      - identity
-      - inventory
-      - redis
+      identity:
+        condition: service_started
+      inventory:
+        condition: service_started
+      redis:
+        condition: service_healthy
     environment:
       Redis__Configuration: "redis:6379"
       Redis__InstanceName: "IdentityServer:"
-        
+      ASPNETCORE_ENVIRONMENT: "Development"
+
   identity:
     image: identity
+    hostname: identity
     container_name: identity
     ports:
       - "8001:8080"
@@ -24,13 +30,17 @@
       context: .
       dockerfile: SRC/SERVICES/IDENTITY/IDENTITY.API/Dockerfile
     depends_on:
-      - redis
+      redis:
+        condition: service_healthy
     environment:
       Redis__Configuration: "redis:6379"
       Redis__InstanceName: "IdentityServer:"
-        
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ConnectionStrings__DefaultConnection: "Server=127.0.0.1,1433;Database=INVENTORY_DB;User Id=sa;Password=KhangNguyen@123;TrustServerCertificate=True;MultipleActiveResultSets=True;"
+
   inventory:
     image: inventory
+    hostname: inventory
     container_name: inventory
     ports:
       - "8002:8080"
@@ -38,27 +48,40 @@
       context: .
       dockerfile: SRC/SERVICES/INVENTORY/INVENTORY.API/Dockerfile
     depends_on:
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
     environment:
       RabbitMQ__Host: "rabbitmq"
       RabbitMQ__Username: "admin"
       RabbitMQ__Password: "admin"
       RabbitMQ__VirtualHost: "/"
       RabbitMQ__Port: 5672
-      
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ConnectionStrings__DefaultConnection: "Server=127.0.0.1,1433;Database=INVENTORY_DB;User Id=sa;Password=KhangNguyen@123;TrustServerCertificate=True;MultipleActiveResultSets=True;"
+
   redis:
     image: redis:8.2
     container_name: redis
     ports:
       - "6379:6379"
     command: ["redis-server", "--appendonly", "yes"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
   rabbitmq:
     image: rabbitmq:4.2.1-management
     container_name: rabbitmq
     ports:
-      - "5672:5672"      
-      - "15672:15672" 
+      - "5672:5672"
+      - "15672:15672"
     environment:
       RABBITMQ_DEFAULT_USER: admin
       RABBITMQ_DEFAULT_PASS: admin
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_port_connectivity"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
